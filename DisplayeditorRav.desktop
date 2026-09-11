@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=DisplayeditorRav
+GenericName=Display Settings
+Comment=Visual monitor layout editor for Omarchy
+Exec=/home/kacm/Work/DisplayeditorRav/target/release/displayeditor-rav
+Icon=displayeditor-rav
+Terminal=false
+Categories=Settings;HardwareSettings;
+Keywords=display;monitor;hyprland;omarchy;settings;
+StartupNotify=true
