@@ -6,6 +6,12 @@ Documentation is deployed at: https://kacm1network.org
 
 See `PLAN.md` for the product and safety plan.
 
+## Feature showcase
+
+![DisplayeditorRav interface showing draggable monitor layouts, display controls, safe preview, automatic rollback, and configuration backups](docs/images/feature-showcase.png)
+
+Arrange connected displays visually, tune each output, preview the complete layout safely, and save only after confirming it works.
+
 ## Features
 
 - Reads live monitor state from `hyprctl monitors all -j`.

@@ -1,0 +1,150 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">DisplayeditorRav feature showcase</title>
+  <desc id="desc">A dark desktop application mockup showing three draggable monitors, display controls, safe preview, automatic rollback, and configuration backups.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#090b10"/>
+      <stop offset="0.55" stop-color="#11141b"/>
+      <stop offset="1" stop-color="#17130d"/>
+    </linearGradient>
+    <linearGradient id="monitor" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#34301f"/>
+      <stop offset="1" stop-color="#211e17"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#f4bf49"/>
+      <stop offset="1" stop-color="#ffda78"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="160%">
+      <feDropShadow dx="0" dy="24" stdDeviation="24" flood-color="#000" flood-opacity="0.5"/>
+    </filter>
+    <filter id="soft" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="54"/>
+    </filter>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#282c34" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <circle cx="180" cy="95" r="180" fill="#c99324" opacity="0.08" filter="url(#soft)"/>
+  <circle cx="1460" cy="770" r="210" fill="#c99324" opacity="0.07" filter="url(#soft)"/>
+
+  <g font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif">
+    <text x="90" y="78" fill="#f6f2e8" font-size="34" font-weight="800" letter-spacing="1">DISPLAYEDITOR RAV</text>
+    <text x="90" y="113" fill="#9da3ad" font-size="18">Visual monitor layout control for Omarchy + Hyprland</text>
+    <g transform="translate(1324 52)">
+      <rect width="186" height="50" rx="25" fill="#171a20" stroke="#343841"/>
+      <circle cx="26" cy="25" r="6" fill="#e4b94d"/>
+      <text x="44" y="32" fill="#e8e4da" font-size="16" font-weight="650">Hyprland live</text>
+    </g>
+
+    <g filter="url(#shadow)" transform="translate(90 154)">
+      <rect width="1420" height="650" rx="18" fill="#15171c" stroke="#353941" stroke-width="2"/>
+      <path d="M18 0H1402Q1420 0 1420 18V72H0V18Q0 0 18 0Z" fill="#1e2026"/>
+      <circle cx="28" cy="36" r="7" fill="#ef6b62"/>
+      <circle cx="52" cy="36" r="7" fill="#e4b94d"/>
+      <circle cx="76" cy="36" r="7" fill="#55bd78"/>
+      <text x="106" y="43" fill="#f3efe6" font-size="18" font-weight="750" letter-spacing="0.8">DISPLAYEDITOR RAV</text>
+      <text x="304" y="43" fill="#858b95" font-size="14">Omarchy monitor control</text>
+      <g transform="translate(1088 20)" fill="#2a2d34" stroke="#40444c">
+        <rect width="78" height="34" rx="7"/><rect x="88" width="68" height="34" rx="7"/><rect x="166" width="68" height="34" rx="7"/><rect x="244" width="68" height="34" rx="7"/>
+      </g>
+      <g fill="#c8ccd2" font-size="12" font-weight="650">
+        <text x="1104" y="42">Refresh</text><text x="1192" y="42">Checks</text><text x="1270" y="42">Docs</text><text x="1343" y="42">About</text>
+      </g>
+
+      <g transform="translate(24 96)">
+        <text x="0" y="26" fill="#f5f1e8" font-size="25" font-weight="760">Arrange displays</text>
+        <text x="206" y="25" fill="#868c96" font-size="14">Drag to match their physical placement</text>
+        <rect y="48" width="996" height="444" rx="12" fill="#0d0e10" stroke="#343841"/>
+        <rect y="48" width="996" height="444" rx="12" fill="url(#grid)"/>
+
+        <g transform="translate(92 164)">
+          <rect width="310" height="174" rx="10" fill="#21242a" stroke="#545a65" stroke-width="2"/>
+          <rect x="12" y="12" width="286" height="126" rx="6" fill="#17191e"/>
+          <text x="155" y="71" text-anchor="middle" fill="#f5f1e8" font-size="30" font-weight="800">1</text>
+          <text x="155" y="102" text-anchor="middle" fill="#aeb3bb" font-size="15">DP-1 · 2560 × 1440</text>
+          <text x="155" y="159" text-anchor="middle" fill="#727983" font-size="12">0 × 180</text>
+        </g>
+        <g transform="translate(396 112)">
+          <rect width="420" height="236" rx="10" fill="url(#monitor)" stroke="#e4b94d" stroke-width="3"/>
+          <rect x="13" y="13" width="394" height="176" rx="6" fill="#191812"/>
+          <text x="210" y="96" text-anchor="middle" fill="#ffda78" font-size="44" font-weight="850">2</text>
+          <text x="210" y="132" text-anchor="middle" fill="#f4e7c5" font-size="16">HDMI-A-1 · 3840 × 2160</text>
+          <g transform="translate(128 200)">
+            <rect width="164" height="25" rx="12.5" fill="#e4b94d" opacity="0.16"/>
+            <text x="82" y="18" text-anchor="middle" fill="#ffda78" font-size="12" font-weight="700">SELECTED · 125%</text>
+          </g>
+        </g>
+        <g transform="translate(807 187)">
+          <rect width="118" height="208" rx="10" fill="#21242a" stroke="#545a65" stroke-width="2"/>
+          <rect x="11" y="11" width="96" height="157" rx="6" fill="#17191e"/>
+          <text x="59" y="78" text-anchor="middle" fill="#f5f1e8" font-size="30" font-weight="800">3</text>
+          <text x="59" y="107" text-anchor="middle" fill="#aeb3bb" font-size="12">DP-2</text>
+          <text x="59" y="190" text-anchor="middle" fill="#727983" font-size="11">Portrait</text>
+        </g>
+        <path d="M394 226h-18m448 0h-18" stroke="#e4b94d" stroke-width="2" stroke-dasharray="4 5" opacity="0.8"/>
+
+        <g transform="translate(0 512)">
+          <rect width="174" height="42" rx="9" fill="#272a30" stroke="#434750"/>
+          <text x="87" y="27" text-anchor="middle" fill="#d5d8de" font-size="14" font-weight="650">Reset editor</text>
+          <rect x="188" width="184" height="42" rx="9" fill="url(#accent)"/>
+          <text x="280" y="27" text-anchor="middle" fill="#17130b" font-size="14" font-weight="800">Preview changes</text>
+          <text x="396" y="27" fill="#8e949e" font-size="13">Changes stay temporary until you confirm</text>
+        </g>
+      </g>
+
+      <g transform="translate(1044 96)">
+        <text y="26" fill="#f5f1e8" font-size="25" font-weight="760">Display settings</text>
+        <text y="66" fill="#858b95" font-size="12" font-weight="650">DISPLAY</text>
+        <rect y="78" width="328" height="42" rx="8" fill="#24272e" stroke="#41454e"/>
+        <text x="14" y="104" fill="#e4e7eb" font-size="14">2 — HDMI-A-1</text><path d="M300 95l6 7 6-7" fill="none" stroke="#9ba1aa" stroke-width="2"/>
+        <text y="151" fill="#858b95" font-size="12" font-weight="650">RESOLUTION &amp; REFRESH</text>
+        <rect y="163" width="328" height="42" rx="8" fill="#24272e" stroke="#41454e"/>
+        <text x="14" y="189" fill="#e4e7eb" font-size="14">3840 × 2160  60.00 Hz</text><path d="M300 180l6 7 6-7" fill="none" stroke="#9ba1aa" stroke-width="2"/>
+        <g transform="translate(0 223)">
+          <text fill="#858b95" font-size="12" font-weight="650">SCALE</text>
+          <rect y="12" width="155" height="42" rx="8" fill="#24272e" stroke="#41454e"/>
+          <text x="14" y="39" fill="#e4e7eb" font-size="14">125%</text>
+          <text x="173" fill="#858b95" font-size="12" font-weight="650">ORIENTATION</text>
+          <rect x="173" y="12" width="155" height="42" rx="8" fill="#24272e" stroke="#41454e"/>
+          <text x="187" y="39" fill="#e4e7eb" font-size="14">Landscape</text>
+        </g>
+        <g transform="translate(0 306)">
+          <rect width="328" height="42" rx="8" fill="#292c33" stroke="#454a54"/>
+          <text x="164" y="27" text-anchor="middle" fill="#e2e5e9" font-size="14" font-weight="650">Identify displays</text>
+          <rect y="54" width="328" height="42" rx="8" fill="#292c33" stroke="#454a54"/>
+          <text x="164" y="81" text-anchor="middle" fill="#e2e5e9" font-size="14" font-weight="650">Make primary / anchor at 0 × 0</text>
+          <rect y="108" width="328" height="42" rx="8" fill="#292c33" stroke="#454a54"/>
+          <text x="164" y="135" text-anchor="middle" fill="#e2e5e9" font-size="14" font-weight="650">Align all display tops</text>
+        </g>
+        <g transform="translate(0 492)">
+          <rect width="328" height="70" rx="10" fill="#1b1e23" stroke="#383c44"/>
+          <circle cx="22" cy="22" r="7" fill="#55bd78"/>
+          <text x="40" y="27" fill="#dfe3e7" font-size="13" font-weight="700">Safe configuration backup</text>
+          <text x="18" y="51" fill="#858b95" font-size="12">Restore latest backup at any time</text>
+        </g>
+      </g>
+    </g>
+
+    <g transform="translate(166 822)">
+      <g>
+        <circle cx="11" cy="11" r="11" fill="#e4b94d"/><text x="11" y="16" text-anchor="middle" fill="#15110a" font-size="14" font-weight="900">1</text>
+        <text x="33" y="16" fill="#e7e2d8" font-size="15" font-weight="700">Drag + snap monitor layouts</text>
+      </g>
+      <g transform="translate(354 0)">
+        <circle cx="11" cy="11" r="11" fill="#e4b94d"/><text x="11" y="16" text-anchor="middle" fill="#15110a" font-size="14" font-weight="900">2</text>
+        <text x="33" y="16" fill="#e7e2d8" font-size="15" font-weight="700">Resolution, scale + rotation</text>
+      </g>
+      <g transform="translate(725 0)">
+        <circle cx="11" cy="11" r="11" fill="#e4b94d"/><text x="11" y="16" text-anchor="middle" fill="#15110a" font-size="14" font-weight="900">3</text>
+        <text x="33" y="16" fill="#e7e2d8" font-size="15" font-weight="700">Timed preview + auto rollback</text>
+      </g>
+      <g transform="translate(1100 0)">
+        <circle cx="11" cy="11" r="11" fill="#e4b94d"/><text x="11" y="16" text-anchor="middle" fill="#15110a" font-size="14" font-weight="900">4</text>
+        <text x="33" y="16" fill="#e7e2d8" font-size="15" font-weight="700">Back up before save</text>
+      </g>
+    </g>
+  </g>
+</svg>
