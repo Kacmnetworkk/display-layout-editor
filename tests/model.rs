@@ -1,7 +1,7 @@
 use displayeditor_rav::{
-    highest_mode_index, normalize_positions, parse_hyprland_monitors, render_omarchy_lua,
-    runtime_layout_lua, runtime_monitor_value, save_config_with_backup, snap_position_to_displays,
-    validate_layout,
+    highest_mode_index, normalize_positions, parse_ddc_brightness, parse_ddc_buses,
+    parse_hyprland_monitors, render_omarchy_lua, runtime_layout_lua, runtime_monitor_value,
+    save_config_with_backup, snap_position_to_displays, validate_layout,
 };
 use std::fs;
 
@@ -13,6 +13,33 @@ const TWO_MONITORS: &str = r#"[
    "refreshRate":59.997,"x":1536,"y":0,"scale":1.25,"transform":0,"focused":true,
    "availableModes":["3840x2160@60.00Hz","2560x1440@59.95Hz","1920x1080@60.00Hz"]}
 ]"#;
+
+#[test]
+fn maps_ddc_buses_to_exact_drm_connector() {
+    let detected = "Display 1\n   I2C bus: /dev/i2c-2\n   DRM connector: card1-DP-1\n   Monitor: AOC:U2790B:\n\nDisplay 2\n   I2C bus: /dev/i2c-6\n   DRM connector: card1-HDMI-A-1\n";
+    let buses = parse_ddc_buses(detected);
+    assert_eq!(buses.get("DP-1"), Some(&2));
+    assert_eq!(buses.get("HDMI-A-1"), Some(&6));
+    assert_eq!(buses.get("DP-10"), None);
+}
+
+#[test]
+fn parses_ddc_current_and_max_brightness() {
+    assert_eq!(parse_ddc_brightness("VCP 10 C 40 100\n"), Some((40, 100)));
+    assert_eq!(parse_ddc_brightness("VCP 10 C 128 255\n"), Some((128, 255)));
+    assert_eq!(parse_ddc_brightness("VCP 10 C 0 0\n"), None);
+    assert_eq!(parse_ddc_brightness("VCP 12 C 40 100\n"), None);
+    assert_eq!(parse_ddc_brightness("DDC communication failed"), None);
+}
+
+#[test]
+fn brightness_percent_maps_to_supported_monitor_range() {
+    assert_eq!(displayeditor_rav::brightness_raw_value(25, 100), Some(25));
+    assert_eq!(displayeditor_rav::brightness_raw_value(50, 255), Some(128));
+    assert_eq!(displayeditor_rav::brightness_raw_value(1, 100), Some(1));
+    assert_eq!(displayeditor_rav::brightness_raw_value(0, 100), None);
+    assert_eq!(displayeditor_rav::brightness_raw_value(50, 0), None);
+}
 
 #[test]
 fn parses_live_hyprland_monitor_json() {
