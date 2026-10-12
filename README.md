@@ -17,6 +17,7 @@ Arrange connected displays visually, tune each output, preview the complete layo
 - Reads live monitor state from `hyprctl monitors all -j`.
 - Drag displays on a proportional canvas with edge snapping.
 - Configure resolution, refresh rate, scale, orientation, and logical position.
+- Adjust hardware brightness on supported DDC/CI monitors (requires `ddcutil` and readable `/dev/i2c-*`).
 - Identify displays with a temporary large-number overlay.
 - Preview the complete layout through one Lua-native `hyprctl eval`.
 - Protect previews with an independent rollback watchdog.
@@ -30,8 +31,8 @@ Arrange connected displays visually, tune each output, preview the complete layo
 
 1. Run the app.
 2. Drag monitor rectangles to match physical placement.
-3. Select a monitor in the inspector to change resolution, scale, or orientation.
-4. Use **Preview changes**.
+3. Select a monitor in the inspector to change resolution, scale, or orientation. For brightness, move its slider and click **Apply brightness**; this changes monitor hardware immediately, separately from layout preview/save.
+4. Use **Preview changes** for layout edits.
 5. If the layout works, click **Keep & save** before the countdown expires.
 6. If anything looks wrong, click **Revert now** or wait for automatic rollback.
 

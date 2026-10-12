@@ -1,4 +1,5 @@
 use serde::Deserialize;
+use std::collections::HashMap;
 use std::fs;
 use std::io::{self, Write};
 use std::path::{Path, PathBuf};
@@ -70,6 +71,52 @@ struct RawMonitor {
     focused: bool,
     #[serde(default)]
     available_modes: Vec<String>,
+}
+
+pub fn parse_ddc_buses(output: &str) -> HashMap<String, u32> {
+    let mut buses = HashMap::new();
+    let (mut bus, mut connector) = (None, None);
+    for line in output.lines().chain(std::iter::once("Display end")) {
+        let line = line.trim();
+        if line.starts_with("Display ") {
+            if let (Some(bus), Some(connector)) = (bus.take(), connector.take()) {
+                buses.insert(connector, bus);
+            }
+            bus = None;
+            connector = None;
+        } else if let Some(value) = line.strip_prefix("I2C bus:") {
+            bus = value
+                .trim()
+                .strip_prefix("/dev/i2c-")
+                .and_then(|n| n.parse().ok());
+        } else if let Some(value) = line.strip_prefix("DRM connector:") {
+            connector = value
+                .trim()
+                .strip_prefix("card")
+                .and_then(|name| name.split_once('-'))
+                .filter(|(card, name)| card.parse::<u32>().is_ok() && !name.is_empty())
+                .map(|(_, name)| name.to_owned());
+        }
+    }
+    buses
+}
+
+pub fn parse_ddc_brightness(output: &str) -> Option<(u16, u16)> {
+    let mut parts = output.split_whitespace();
+    if parts.next()? != "VCP" || parts.next()? != "10" || parts.next()? != "C" {
+        return None;
+    }
+    let current: u16 = parts.next()?.parse().ok()?;
+    let maximum: u16 = parts.next()?.parse().ok()?;
+    (maximum > 0 && current <= maximum).then_some((current, maximum))
+}
+
+pub fn brightness_raw_value(percent: u8, maximum: u16) -> Option<u16> {
+    (1..=100)
+        .contains(&percent)
+        .then_some(maximum)
+        .filter(|max| *max > 0)
+        .map(|max| ((u32::from(percent) * u32::from(max) + 50) / 100).max(1) as u16)
 }
 
 pub fn parse_mode(raw: &str) -> Option<DisplayMode> {

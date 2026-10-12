@@ -1,12 +1,13 @@
 use displayeditor_rav::{
-    Display, anchor_display, highest_mode_index, parse_hyprland_monitors, render_omarchy_lua,
-    runtime_layout_lua, save_config_with_backup, snap_position_to_displays, validate_layout,
+    Display, anchor_display, brightness_raw_value, highest_mode_index, parse_ddc_brightness,
+    parse_ddc_buses, parse_hyprland_monitors, render_omarchy_lua, runtime_layout_lua,
+    save_config_with_backup, snap_position_to_displays, validate_layout,
 };
 use eframe::egui::{
     self, Align, Color32, ComboBox, CornerRadius, FontId, Layout, Pos2, Rect, Sense, Stroke,
     StrokeKind, Vec2,
 };
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
@@ -30,7 +31,14 @@ struct Preview {
     watchdog_layout: PathBuf,
 }
 
+struct BrightnessControl {
+    bus: u32,
+    percent: u8,
+    maximum: u16,
+}
+
 struct RavApp {
+    brightness: HashMap<String, BrightnessControl>,
     displays: Vec<Display>,
     baseline: Vec<Display>,
     selected: usize,
@@ -46,6 +54,7 @@ struct RavApp {
 impl RavApp {
     fn load() -> Self {
         let mut app = Self {
+            brightness: HashMap::new(),
             displays: Vec::new(),
             baseline: Vec::new(),
             selected: 0,
@@ -70,6 +79,7 @@ impl RavApp {
                     1
                 };
                 self.baseline = displays.clone();
+                self.brightness = detect_brightness(&displays);
                 self.displays = displays;
                 self.selected = self.selected.min(self.displays.len() - 1);
                 self.status = format!("{} connected displays", self.displays.len());
@@ -244,6 +254,7 @@ impl RavApp {
             .exact_size(360.0)
             .frame(egui::Frame::new().fill(PANEL).inner_margin(18.0))
             .show(root, |ui| {
+                egui::ScrollArea::vertical().show(ui, |ui| {
                 ui.heading("Display settings");
                 ui.add_space(12.0);
                 if self.displays.is_empty() {
@@ -273,6 +284,25 @@ impl RavApp {
                 ui.add_space(12.0);
                 ui.label(egui::RichText::new(&display.description).color(MUTED));
                 ui.monospace(&display.name);
+                ui.add_space(12.0);
+                ui.label(egui::RichText::new("Brightness").color(MUTED));
+                let display_name = display.name.clone();
+                if let Some(control) = self.brightness.get_mut(&display_name) {
+                    ui.add(egui::Slider::new(&mut control.percent, 1..=100).suffix("%"));
+                    ui.small("Hardware brightness (DDC/CI). Apply separately from layout preview.");
+                    if ui.button("Apply brightness").clicked() {
+                        match set_brightness(control) {
+                            Ok(()) => {
+                                self.status = format!("{} brightness set to {}%", display_name, control.percent);
+                                self.error = None;
+                            }
+                            Err(error) => self.error = Some(error),
+                        }
+                    }
+                } else {
+                    ui.colored_label(MUTED, "Hardware brightness unavailable for this display.");
+                    ui.small("Check DDC/CI in monitor settings and access to /dev/i2c-*; Refresh to retry.");
+                }
                 ui.separator();
 
                 let selected_label = display
@@ -392,6 +422,7 @@ impl RavApp {
                 ui.small(
                     "Drag the numbered display in the canvas or enter exact logical coordinates.",
                 );
+                });
             });
     }
 
@@ -660,6 +691,79 @@ fn health_checks() -> Vec<HealthCheck> {
             detail: config.display().to_string(),
         },
     ]
+}
+
+fn read_ddc_brightness(bus: u32) -> Result<(u16, u16), String> {
+    let output = Command::new("ddcutil")
+        .args(["--bus", &bus.to_string(), "getvcp", "10", "--brief"])
+        .output()
+        .map_err(|error| format!("Could not run ddcutil: {error}"))?;
+    if !output.status.success() {
+        return Err(format!(
+            "DDC read failed: {}",
+            String::from_utf8_lossy(&output.stderr).trim()
+        ));
+    }
+    parse_ddc_brightness(&String::from_utf8_lossy(&output.stdout))
+        .ok_or_else(|| "Monitor did not return a usable brightness value".to_owned())
+}
+
+fn detect_brightness(displays: &[Display]) -> HashMap<String, BrightnessControl> {
+    let Ok(output) = Command::new("ddcutil").args(["detect", "--brief"]).output() else {
+        return HashMap::new();
+    };
+    if !output.status.success() {
+        return HashMap::new();
+    }
+    let buses = parse_ddc_buses(&String::from_utf8_lossy(&output.stdout));
+    displays
+        .iter()
+        .filter_map(|display| {
+            let bus = *buses.get(&display.name)?;
+            let (current, maximum) = read_ddc_brightness(bus).ok()?;
+            Some((
+                display.name.clone(),
+                BrightnessControl {
+                    bus,
+                    percent: ((u32::from(current) * 100 + u32::from(maximum) / 2)
+                        / u32::from(maximum))
+                    .clamp(1, 100) as u8,
+                    maximum,
+                },
+            ))
+        })
+        .collect()
+}
+
+fn set_brightness(control: &mut BrightnessControl) -> Result<(), String> {
+    let raw = brightness_raw_value(control.percent, control.maximum)
+        .ok_or_else(|| "Invalid brightness value".to_owned())?;
+    let output = Command::new("ddcutil")
+        .args([
+            "--bus",
+            &control.bus.to_string(),
+            "setvcp",
+            "10",
+            &raw.to_string(),
+        ])
+        .output()
+        .map_err(|error| format!("Could not run ddcutil: {error}"))?;
+    if !output.status.success() {
+        return Err(format!(
+            "DDC brightness change failed: {}",
+            String::from_utf8_lossy(&output.stderr).trim()
+        ));
+    }
+    let (current, maximum) = read_ddc_brightness(control.bus)?;
+    control.maximum = maximum;
+    control.percent = ((u32::from(current) * 100 + u32::from(maximum) / 2) / u32::from(maximum))
+        .clamp(1, 100) as u8;
+    if current.abs_diff(raw) > 1 {
+        return Err(format!(
+            "Monitor reported brightness {current}, expected {raw}"
+        ));
+    }
+    Ok(())
 }
 
 fn read_live_displays() -> Result<Vec<Display>, String> {
@@ -1005,6 +1109,7 @@ fn main() -> eframe::Result {
         match read_live_displays() {
             Ok(displays) => {
                 println!("DisplayeditorRav: {} connected displays", displays.len());
+                let brightness = detect_brightness(&displays);
                 for display in displays {
                     println!(
                         "{}: {}x{} at {}x{}, scale {:.2}, {} modes",
@@ -1016,6 +1121,16 @@ fn main() -> eframe::Result {
                         display.scale,
                         display.available_modes.len()
                     );
+                    if let Some(control) = brightness.get(&display.name) {
+                        println!(
+                            "  Hardware brightness: {}% (DDC/CI bus {})",
+                            control.percent, control.bus
+                        );
+                    } else {
+                        println!(
+                            "  Hardware brightness: unavailable (DDC/CI not detected or readable)"
+                        );
+                    }
                 }
                 return Ok(());
             }
