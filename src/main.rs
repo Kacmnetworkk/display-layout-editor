@@ -21,7 +21,7 @@ const TEXT: Color32 = Color32::from_rgb(241, 242, 243);
 const MUTED: Color32 = Color32::from_rgb(151, 156, 166);
 const ACCENT: Color32 = Color32::from_rgb(230, 168, 54);
 const DANGER: Color32 = Color32::from_rgb(229, 92, 92);
-const DOCS_URL: &str = "https://kacm1network.org";
+const DOCS_URL: &str = "https://github.com/Kacmnetworkk/display-layout-editor/wiki";
 const APP_ICON_SVG: &str = include_str!("../assets/displayeditor-rav.svg");
 
 struct Preview {

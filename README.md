@@ -2,7 +2,11 @@
 
 A visual, safe monitor arrangement editor for Omarchy/Hyprland, written in Rust with egui.
 
-Documentation is deployed at: https://kacm1network.org
+Website: https://kacmnetworkk.github.io/display-layout-editor/
+
+Source: https://github.com/Kacmnetworkk/display-layout-editor
+
+Documentation: https://github.com/Kacmnetworkk/display-layout-editor/wiki
 
 See `PLAN.md` for the product and safety plan.
 
@@ -37,6 +41,16 @@ Arrange connected displays visually, tune each output, preview the complete layo
 6. If anything looks wrong, click **Revert now** or wait for automatic rollback.
 
 The app writes only `~/.config/hypr/monitors.lua` and never modifies `/usr/share/omarchy/`.
+
+## Install as an Omarchy shell plugin
+
+This builds the release app, packages it into a user-owned Omarchy bar widget, validates the manifest, and enables it:
+
+```bash
+./install-omarchy-plugin.sh
+```
+
+Click the display-layout icon in the bar to open the editor. The installed plugin lives at `~/.config/omarchy/plugins/local.display-layout-editor/`; disable it with `omarchy plugin disable local.display-layout-editor`.
 
 ## Install in the Omarchy app selector
 

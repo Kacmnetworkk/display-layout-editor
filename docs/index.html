@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="dark">
+    <meta name="theme-color" content="#0a0c10">
+    <meta name="description" content="A safe, visual Hyprland display-layout editor for Omarchy.">
+    <link rel="canonical" href="https://kacmnetworkk.github.io/display-layout-editor/">
+    <meta property="og:title" content="DisplayeditorRav">
+    <meta property="og:description" content="A safe, visual Hyprland display-layout editor for Omarchy.">
+    <meta property="og:image" content="https://kacmnetworkk.github.io/display-layout-editor/images/feature-showcase.png">
+    <meta property="og:type" content="website">
+    <title>DisplayeditorRav — visual display layouts for Omarchy</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+
+    <div class="site-shell">
+      <header class="site-header">
+        <a class="brand" href="./" aria-label="DisplayeditorRav home">
+          <span class="brand-mark" aria-hidden="true">DR</span>
+          <span>DisplayeditorRav</span>
+        </a>
+        <nav class="site-nav" aria-label="Primary navigation">
+          <a href="#features">Features</a>
+          <a href="#install">Install</a>
+          <a href="https://github.com/Kacmnetworkk/display-layout-editor/wiki">Wiki</a>
+          <a href="https://github.com/Kacmnetworkk/display-layout-editor">Source</a>
+        </nav>
+      </header>
+
+      <main id="main-content">
+        <section class="hero" aria-labelledby="hero-title">
+          <div class="hero-grid">
+            <div class="hero-copy">
+              <p class="eyebrow">Omarchy shell plugin · Hyprland utility</p>
+              <h1 id="hero-title">Arrange every display without the risky guesswork.</h1>
+              <p class="lede">
+                DisplayeditorRav turns a monitor layout into a visual, reversible workflow:
+                drag displays into place, preview the complete arrangement, then save only after
+                you confirm it works.
+              </p>
+              <div class="actions">
+                <a class="button button-primary" href="#install">Install the plugin</a>
+                <a class="button button-secondary" href="https://github.com/Kacmnetworkk/display-layout-editor/wiki">Read the wiki</a>
+              </div>
+              <ul class="hero-facts" aria-label="Key capabilities">
+                <li>Reads live Hyprland monitor state</li>
+                <li>Previews changes with automatic rollback</li>
+                <li>Backs up configuration before saving</li>
+              </ul>
+            </div>
+
+            <figure class="hero-visual">
+              <img
+                src="images/feature-showcase.png"
+                width="1600"
+                height="900"
+                fetchpriority="high"
+                alt="DisplayeditorRav showing a draggable three-monitor layout, display settings, and safe preview controls."
+              >
+              <figcaption>Drag, snap, preview, and keep a layout only when it is right.</figcaption>
+            </figure>
+          </div>
+        </section>
+
+        <section id="features" class="section" aria-labelledby="features-title">
+          <div class="section-heading">
+            <p class="eyebrow">Designed for recovery</p>
+            <h2 id="features-title">A safer path from layout idea to a saved desktop.</h2>
+          </div>
+          <div class="feature-grid">
+            <article class="feature-card">
+              <span class="feature-number" aria-hidden="true">01</span>
+              <h3>See the real layout</h3>
+              <p>Starts from <code>hyprctl monitors all -j</code>, so connected displays, modes, scale, and position reflect the live session.</p>
+            </article>
+            <article class="feature-card">
+              <span class="feature-number" aria-hidden="true">02</span>
+              <h3>Arrange with intent</h3>
+              <p>Move proportional display cards with edge snapping, then tune resolution, refresh rate, scale, orientation, and logical coordinates.</p>
+            </article>
+            <article class="feature-card">
+              <span class="feature-number" aria-hidden="true">03</span>
+              <h3>Preview before persistence</h3>
+              <p>Applies the complete layout as a temporary preview and arms an independent watchdog to restore the original setup if confirmation never arrives.</p>
+            </article>
+            <article class="feature-card">
+              <span class="feature-number" aria-hidden="true">04</span>
+              <h3>Save with a way back</h3>
+              <p>Validates generated Lua, writes only your user monitor configuration, and creates a backup before every persistent update.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section workflow" aria-labelledby="workflow-title">
+          <div class="section-heading">
+            <p class="eyebrow">The workflow</p>
+            <h2 id="workflow-title">Change displays without stranding yourself.</h2>
+          </div>
+          <ol class="workflow-list">
+            <li><strong>Read</strong><span>Open the current connected-display layout.</span></li>
+            <li><strong>Arrange</strong><span>Drag and configure the setup you want.</span></li>
+            <li><strong>Preview</strong><span>Test it under a countdown with rollback protection.</span></li>
+            <li><strong>Keep &amp; save</strong><span>Persist only after the layout is confirmed.</span></li>
+          </ol>
+        </section>
+
+        <section id="install" class="section install" aria-labelledby="install-title">
+          <div class="install-copy">
+            <p class="eyebrow">Install</p>
+            <h2 id="install-title">Add it to your Omarchy bar.</h2>
+            <p>
+              The installer builds the native editor, packages a user-owned Omarchy bar widget,
+              validates its manifest, and enables it. Click the display-layout icon in the right
+              side of the bar to launch the editor.
+            </p>
+          </div>
+          <div class="command-card">
+            <pre><code>git clone https://github.com/Kacmnetworkk/display-layout-editor.git
+cd display-layout-editor
+./install-omarchy-plugin.sh</code></pre>
+            <p>Requires Omarchy, Hyprland, and Cargo. The plugin never edits <code>/usr/share/omarchy/</code>.</p>
+          </div>
+        </section>
+
+        <section class="section resources" aria-labelledby="resources-title">
+          <div class="section-heading">
+            <p class="eyebrow">Continue</p>
+            <h2 id="resources-title">Source, setup notes, and troubleshooting.</h2>
+          </div>
+          <div class="resource-grid">
+            <a class="resource-link" href="https://github.com/Kacmnetworkk/display-layout-editor">
+              <span>GitHub repository</span>
+              <strong>Browse the source <span aria-hidden="true">↗</span></strong>
+            </a>
+            <a class="resource-link" href="https://github.com/Kacmnetworkk/display-layout-editor/wiki">
+              <span>Project wiki</span>
+              <strong>Read the documentation <span aria-hidden="true">↗</span></strong>
+            </a>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <span>DisplayeditorRav</span>
+        <span>MIT licensed · Built for Omarchy and Hyprland</span>
+      </footer>
+    </div>
+  </body>
+</html>

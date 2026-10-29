@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "local.display-layout-editor",
+  "name": "Display Layout Editor",
+  "version": "0.1.0",
+  "author": "Local",
+  "description": "Launch the safe visual Hyprland display-layout editor",
+  "homepage": "https://kacmnetworkk.github.io/display-layout-editor/",
+  "license": "MIT",
+  "kinds": [
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "barWidget": "BarWidget.qml"
+  },
+  "barWidget": {
+    "displayName": "Display Layout Editor",
+    "description": "Open the visual Hyprland display-layout editor",
+    "category": "System",
+    "allowMultiple": false,
+    "defaultSection": "right"
+  }
+}

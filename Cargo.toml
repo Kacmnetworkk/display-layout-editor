@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2024"
 description = "A safe visual display layout editor for Omarchy and Hyprland"
 license = "MIT"
-homepage = "https://kacm1network.org"
+homepage = "https://kacmnetworkk.github.io/display-layout-editor/"
 
 [dependencies]
 eframe = { version = "0.36.2", default-features = false, features = ["default_fonts", "glow", "wayland", "x11"] }
