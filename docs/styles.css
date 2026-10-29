@@ -422,36 +422,112 @@ h3 {
   gap: clamp(1.5rem, 4vw, 4rem);
 }
 
-.command-card {
-  position: relative;
-  padding: 2.35rem 1rem 1rem;
+.command-grid {
+  display: grid;
+  min-inline-size: 0;
+  gap: 1rem;
 }
 
-.command-card::before {
-  position: absolute;
-  inset-block-start: 0.7rem;
-  inset-inline-start: 1rem;
+.command-card {
+  display: grid;
+  gap: 0.8rem;
+  min-inline-size: 0;
+  padding: 1rem;
+}
+
+.command-card--primary {
+  border-color: rgb(99 255 136 / 62%);
+  box-shadow: inset 0 0 1.5rem rgb(99 255 136 / 6%);
+}
+
+.command-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.command-label,
+.command-heading h3,
+.command-intro,
+.copy-status {
+  margin: 0;
+}
+
+.command-label {
   color: var(--accent-alt);
-  content: "terminal · install";
-  font-size: 0.72rem;
-  letter-spacing: 0.06em;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
+.command-heading h3 {
+  color: var(--text);
+  font-size: 0.98rem;
+}
+
+.command-intro {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.copy-command {
+  min-block-size: 2.35rem;
+  padding: 0.45rem 0.7rem;
+  border: 1px solid var(--line-bright);
+  border-radius: 0;
+  background: rgb(6 25 13 / 95%);
+  color: var(--accent);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease;
+}
+
+.copy-command:hover {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.copy-command:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.copy-command[data-copy-state="copied"] {
+  border-color: var(--accent-alt);
+  background: var(--accent-alt);
+  color: #00161a;
+}
+
+.copy-command[data-copy-state="failed"] {
+  border-color: #ffbb75;
+  color: #ffcf9a;
+}
+
 .command-card pre {
+  min-inline-size: 0;
   margin: 0;
   padding: 1rem;
   overflow: auto;
+  overflow-wrap: anywhere;
   border: 1px solid rgb(99 255 136 / 28%);
   border-radius: 0;
   background: #010502;
   scrollbar-color: var(--line-bright) #010502;
-  scrollbar-gutter: stable;
+  white-space: pre-wrap;
 }
 
-.command-card p {
-  padding: 1rem 0.2rem 0.2rem;
-  font-size: 0.82rem;
+.copy-status {
+  min-block-size: 1.5em;
+  color: var(--accent-alt);
+  font-size: 0.78rem;
 }
 
 .resource-link {
@@ -523,6 +599,7 @@ h3 {
   }
 
   .button,
+  .copy-command,
   .resource-link {
     transition: none;
   }

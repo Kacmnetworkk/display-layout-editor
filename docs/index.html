@@ -113,16 +113,41 @@
             <p class="eyebrow">Install</p>
             <h2 id="install-title">Add it to your Omarchy bar.</h2>
             <p>
-              The installer builds the native editor, packages a user-owned Omarchy bar widget,
-              validates its manifest, and enables it. Click the display-layout icon in the right
-              side of the bar to launch the editor.
+              Choose the prebuilt release bundle or a local source build. Either installs a
+              user-owned Omarchy bar widget, validates its manifest, and enables it. Click the
+              display-layout icon in the right side of the bar to launch the editor.
             </p>
           </div>
-          <div class="command-card">
-            <pre><code>git clone https://github.com/Kacmnetworkk/display-layout-editor.git
+          <div class="command-grid">
+            <article class="command-card command-card--primary">
+              <div class="command-heading">
+                <div>
+                  <p class="command-label">Recommended · Linux x86_64</p>
+                  <h3>Install from the release tarball</h3>
+                </div>
+                <button class="copy-command" type="button" data-copy-target="release-install-command" aria-controls="release-install-command" aria-describedby="release-copy-status">Copy commands</button>
+              </div>
+              <p class="command-intro">Paste this into a terminal. It installs the bundled plugin without a local Rust toolchain.</p>
+              <pre id="release-install-command"><code>curl -LO https://github.com/Kacmnetworkk/display-layout-editor/releases/download/v0.1.0/displayeditor-rav-v0.1.0-linux-x86_64.tar.gz
+tar -xzf displayeditor-rav-v0.1.0-linux-x86_64.tar.gz
+cd displayeditor-rav-v0.1.0-linux-x86_64
+./install.sh</code></pre>
+              <p id="release-copy-status" class="copy-status" aria-live="polite"></p>
+            </article>
+            <article class="command-card">
+              <div class="command-heading">
+                <div>
+                  <p class="command-label">Build from source</p>
+                  <h3>Clone and install</h3>
+                </div>
+                <button class="copy-command" type="button" data-copy-target="source-install-command" aria-controls="source-install-command" aria-describedby="source-copy-status">Copy commands</button>
+              </div>
+              <p class="command-intro">Paste this into a terminal if you prefer a local release build. Requires Omarchy, Hyprland, and Cargo.</p>
+              <pre id="source-install-command"><code>git clone https://github.com/Kacmnetworkk/display-layout-editor.git
 cd display-layout-editor
 ./install-omarchy-plugin.sh</code></pre>
-            <p>Requires Omarchy, Hyprland, and Cargo. The plugin never edits <code>/usr/share/omarchy/</code>.</p>
+              <p id="source-copy-status" class="copy-status" aria-live="polite"></p>
+            </article>
           </div>
         </section>
 
@@ -149,5 +174,76 @@ cd display-layout-editor
         <span>MIT licensed · Built for Omarchy and Hyprland</span>
       </footer>
     </div>
+
+    <script>
+      (() => {
+        const defaultLabel = "Copy commands";
+
+        function setCopyStatus(button, state, message) {
+          const status = document.getElementById(button.getAttribute("aria-describedby"));
+          let label = defaultLabel;
+          if (state === "copied") {
+            label = "Copied";
+          } else if (state === "failed") {
+            label = "Copy failed";
+          }
+
+          button.dataset.copyState = state;
+          button.textContent = label;
+          if (status) status.textContent = message;
+
+          window.clearTimeout(button.copyResetTimer);
+          button.copyResetTimer = window.setTimeout(() => {
+            delete button.dataset.copyState;
+            button.textContent = defaultLabel;
+            if (status) status.textContent = "";
+          }, 2400);
+        }
+
+        async function copyCommand(text) {
+          if (window.isSecureContext && navigator.clipboard?.writeText) {
+            try {
+              await navigator.clipboard.writeText(text);
+              return true;
+            } catch {
+              // Fall through to the selection-based fallback below.
+            }
+          }
+
+          const temporaryField = document.createElement("textarea");
+          temporaryField.value = text;
+          temporaryField.setAttribute("readonly", "");
+          temporaryField.style.position = "fixed";
+          temporaryField.style.opacity = "0";
+          try {
+            document.body.append(temporaryField);
+            temporaryField.select();
+            return document.execCommand("copy");
+          } finally {
+            temporaryField.remove();
+          }
+        }
+
+        document.querySelectorAll("[data-copy-target]").forEach((button) => {
+          button.addEventListener("click", async () => {
+            const command = document.getElementById(button.dataset.copyTarget);
+            if (!command) return;
+
+            let copied = false;
+            try {
+              copied = await copyCommand(command.textContent.trim());
+            } catch {
+              copied = false;
+            }
+
+            setCopyStatus(
+              button,
+              copied ? "copied" : "failed",
+              copied ? "Commands copied. Paste them into a terminal." : "Select the commands above and copy them manually."
+            );
+          });
+        });
+      })();
+    </script>
   </body>
 </html>
